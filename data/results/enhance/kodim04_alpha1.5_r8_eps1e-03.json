@@ -1,0 +1,7 @@
+{
+  "alpha": 1.5,
+  "eps": 0.001,
+  "input": "data/input/portrait/kodim04.png",
+  "mode": "enhance",
+  "radius": 8
+}

@@ -1,0 +1,6 @@
+{
+  "eps": 0.01,
+  "input": "data/input/portrait/kodim15.png",
+  "mode": "smoothing",
+  "radius": 16
+}

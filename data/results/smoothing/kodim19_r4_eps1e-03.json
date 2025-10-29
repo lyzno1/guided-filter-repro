@@ -1,0 +1,6 @@
+{
+  "eps": 0.001,
+  "input": "data/input/landscape/kodim19.png",
+  "mode": "smoothing",
+  "radius": 4
+}

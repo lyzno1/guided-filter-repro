@@ -1,0 +1,9 @@
+{
+  "baseline_method": "bilinear",
+  "eps": 0.0001,
+  "guide": "data/input/landscape/kodim19.png",
+  "mode": "joint_upsample",
+  "radius": 4,
+  "scale": 0.25,
+  "upsample_method": "nearest"
+}
