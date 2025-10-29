@@ -85,21 +85,18 @@ def _guided_filter_color(I: np.ndarray, p: np.ndarray, radius: int, eps: float) 
             cov = _box_filter(I[:, :, i] * I[:, :, j], radius) - mean_I[:, :, i] * mean_I[:, :, j]
             cov_I[:, :, i, j] = cov
             cov_I[:, :, j, i] = cov
-    cov_I += eps_eye
-
     channels_p = p.shape[2]
     cov_Ip = np.empty(I.shape[:2] + (3, channels_p), dtype=np.float32)
     for c in range(channels_p):
         for k in range(3):
             cov_Ip[:, :, k, c] = _box_filter(I[:, :, k] * p[:, :, c], radius) - mean_I[:, :, k] * mean_p[:, :, c]
 
-    # Solve Σ a = cov_Ip
     h, w = I.shape[:2]
-    cov_I_reshaped = cov_I.reshape(-1, 3, 3)
-    cov_Ip_reshaped = cov_Ip.reshape(-1, 3, channels_p)
-    a = np.empty_like(cov_Ip_reshaped)
-    for c in range(channels_p):
-        a[:, :, c] = np.linalg.solve(cov_I_reshaped, cov_Ip_reshaped[:, :, c])
+    cov_I = cov_I.reshape(-1, 3, 3) + eps_eye
+    cov_Ip = cov_Ip.reshape(-1, 3, channels_p)
+
+    inv_cov_I = np.linalg.inv(cov_I)
+    a = np.einsum("nij,njk->nik", inv_cov_I, cov_Ip)
     a = a.reshape(h, w, 3, channels_p)
 
     mean_I_expanded = mean_I[:, :, :, None]
