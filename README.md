@@ -17,7 +17,8 @@ uv run python src/demo_smoothing.py --input data/input/example.jpg --radius 8 --
 
 ### 数据结构
 
-- `data/input/`：放置原始图像（建议至少包含自然风景、人像各一张，额外准备一对低/高分辨率图用于联合上采样）
+- `data/input/portrait/`：人像或城市夜景等主体图像（用于细节增强、平滑对比）
+- `data/input/landscape/`：自然/风景图（用于平滑、联合上采样）
 - `data/results/<demo>/`：脚本运行后自动生成的结果图与参数记录（JSON）
 
 ### 脚本速览
@@ -27,8 +28,19 @@ uv run python src/demo_smoothing.py --input data/input/example.jpg --radius 8 --
 | `src/demo_smoothing.py` | 自引导平滑/边缘保留，保存滤波结果与对比图 | `--radius`, `--eps` |
 | `src/demo_enhance.py` | 细节增强，输出 `I + alpha (I - GF(I))` | `--alpha`, `--radius`, `--eps` |
 | `src/demo_joint_upsample.py` | 联合上采样，对比普通插值与导引滤波结果 | `--upsample-method`, `--baseline-method`, `--radius`, `--eps` |
+| `scripts/run_suite.py` | 一键批量运行上述实验，自动遍历目录与参数网格 | `--skip`, `--smoothing-radii`, `--enhance-alphas`, `--upsample-scale` 等 |
 
 所有脚本会在结果目录内生成 `<stem>_...json` 用于记录输入路径与参数，便于报告复盘。
+
+#### 批量运行示例
+
+```bash
+# 默认遍历 portrait/ 与 landscape/ 目录图像，跑全套实验
+uv run scripts/run_suite.py
+
+# 只跑平滑与细节增强，跳过联合上采样
+uv run scripts/run_suite.py --skip joint
+```
 
 ### 复现实验建议
 
